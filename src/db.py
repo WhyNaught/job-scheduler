@@ -1,4 +1,4 @@
-from src.config import DB_CONNECTION_STRING
+from config import DB_CONNECTION_STRING
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker

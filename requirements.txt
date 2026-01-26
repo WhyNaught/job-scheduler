@@ -4,3 +4,4 @@ sqlalchemy
 databases 
 pymysql 
 aiomysql
+dotenv
