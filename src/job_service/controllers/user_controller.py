@@ -34,7 +34,8 @@ async def fetch_user_by_id(user_id: int, db: Session = Depends(get_db)):
 
 @router.post("/users/{user_id}")
 async def add_job(user_id: int, job_request: JobPostRequest, db: Session = Depends(get_db)):
-    created_time = datetime.now().replace(second=0, microsecond=0)
+    now_dt = datetime.now().replace(second=0, microsecond=0)
+    created_time = now_dt.timestamp()
 
     fetched_user = get_user(user_id=user_id, db=db)
     if not fetched_user:
@@ -52,8 +53,10 @@ async def add_job(user_id: int, job_request: JobPostRequest, db: Session = Depen
     db.commit()
     db.refresh(new_job)
 
+    duration = isodate.parse_duration(job_request.interval)
+    next_exec_time = (now_dt + duration).timestamp()
     task_schedule = TaskSchedule(
-        next_execution_time=int(created_time + isodate.parse_duration(job_request.interval)), 
+        next_execution_time=int(next_exec_time), 
         job_id=new_job.job_id
     )
     db.add(task_schedule)
