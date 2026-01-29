@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from db import get_db
 from models.TaskHistory import TaskHistory
+from models.TaskSchedule import TaskSchedule 
 
 router = APIRouter()
 
@@ -20,3 +21,10 @@ async def upload_task_history(task_history: TaskHistory, db: Session = Depends(g
     db.commit()
     db.refresh(task_history)
     return task_history
+
+@router.post("/task/schedule")
+async def schedule_task(task_schedule: TaskSchedule, db: Session = Depends(get_db)):
+    db.add(task_schedule)
+    db.commit()
+    db.refresh(task_schedule)
+    return task_schedule
