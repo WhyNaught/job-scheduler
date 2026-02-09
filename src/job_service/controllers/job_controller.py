@@ -36,6 +36,7 @@ async def schedule_task(task_schedule: TaskScheduleRequest, db: Session = Depend
         job_id=task_schedule.job_id, 
         next_execution_time=task_schedule.next_execution_time
     )
+
     db.add(new_task_schedule)
     db.commit()
     db.refresh(new_task_schedule)

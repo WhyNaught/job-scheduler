@@ -5,6 +5,7 @@ from pydantic import BaseModel
 class TaskScheduleRequest(BaseModel): 
     next_execution_time: int 
     job_id: int
+    script: str
 
 class TaskSchedule(Base):
     __tablename__ = "task_schedule"
