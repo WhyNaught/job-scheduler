@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 from services.user_service import get_user, create_user, get_all_users
 from db import get_db
@@ -32,8 +32,9 @@ async def fetch_user_by_id(user_id: int, db: Session = Depends(get_db)):
     
     return fetched_user
 
+# route for making a new job 
 @router.post("/users/{user_id}")
-async def add_job(user_id: int, job_request: JobPostRequest, db: Session = Depends(get_db)):
+async def add_job(user_id: int, job_request: JobPostRequest, file: UploadFile, db: Session = Depends(get_db)):
     now_dt = datetime.now().replace(second=0, microsecond=0)
     created_time = now_dt.timestamp()
 
@@ -52,6 +53,13 @@ async def add_job(user_id: int, job_request: JobPostRequest, db: Session = Depen
     db.add(new_job)
     db.commit()
     db.refresh(new_job)
+
+    # write job script to local host machine (this will be mapped via dockerfile)
+    job_id = new_job.job_id
+    file_bytes = file.file.read()
+
+    with open(f"scripts/${job_id}.py", "wb") as bin_file:
+        bin_file.write(file_bytes)
 
     duration = isodate.parse_duration(job_request.interval)
     next_exec_time = (now_dt + duration).timestamp()
