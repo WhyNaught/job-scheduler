@@ -2,7 +2,5 @@ fastapi
 uvicorn 
 sqlalchemy 
 databases 
-pymysql 
-aiomysql
 dotenv
 isodate
