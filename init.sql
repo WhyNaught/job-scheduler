@@ -1,133 +1,300 @@
-CREATE DATABASE  IF NOT EXISTS `job_scheduler` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `job_scheduler`;
--- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
 --
--- Host: localhost    Database: job_scheduler
--- ------------------------------------------------------
--- Server version       8.0.44
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `jobs`
+-- PostgreSQL database cluster dump
 --
 
-DROP TABLE IF EXISTS `jobs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `jobs` (
-  `job_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `is_recurring` tinyint NOT NULL,
-  `interval` varchar(45) NOT NULL,
-  `max_retry_count` int NOT NULL,
-  `created_time` int NOT NULL,
-  PRIMARY KEY (`job_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+\restrict yva3s9sCsOJuKROzKbg6YcO4rbErpwU3bdRDGhFnbiL8B7BY033wVuFTQobHNsG
+
+SET default_transaction_read_only = off;
+
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
 
 --
--- Dumping data for table `jobs`
+-- Roles
 --
 
-LOCK TABLES `jobs` WRITE;
-/*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
-INSERT INTO `jobs` VALUES (1,3,1,'PT3H',3,1769724840),(2,3,1,'PT3H',3,1769724900),(3,3,1,'PT3H',3,1769725080);
-/*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE ROLE postgres;
+ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS;
 
 --
--- Table structure for table `task_history`
+-- User Configurations
 --
 
-DROP TABLE IF EXISTS `task_history`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `task_history` (
-  `job_id` int NOT NULL,
-  `execution_time` int NOT NULL,
-  `status` varchar(45) NOT NULL,
-  `retry_count` int NOT NULL,
-  `last_update_time` int NOT NULL,
-  PRIMARY KEY (`job_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+
+
+
+
+
+\unrestrict yva3s9sCsOJuKROzKbg6YcO4rbErpwU3bdRDGhFnbiL8B7BY033wVuFTQobHNsG
 
 --
--- Dumping data for table `task_history`
+-- Databases
 --
 
-LOCK TABLES `task_history` WRITE;
-/*!40000 ALTER TABLE `task_history` DISABLE KEYS */;
-INSERT INTO `task_history` VALUES (3,1769735880,'success',0,1769735880);
-/*!40000 ALTER TABLE `task_history` ENABLE KEYS */;
-UNLOCK TABLES;
-
 --
--- Table structure for table `task_schedule`
+-- Database "template1" dump
 --
 
-DROP TABLE IF EXISTS `task_schedule`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `task_schedule` (
-  `next_execution_time` int NOT NULL,
-  `job_id` int NOT NULL,
-  PRIMARY KEY (`job_id`,`next_execution_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+\connect template1
 
 --
--- Dumping data for table `task_schedule`
+-- PostgreSQL database dump
 --
 
-LOCK TABLES `task_schedule` WRITE;
-/*!40000 ALTER TABLE `task_schedule` DISABLE KEYS */;
-INSERT INTO `task_schedule` VALUES (1769735880,3);
-/*!40000 ALTER TABLE `task_schedule` ENABLE KEYS */;
-UNLOCK TABLES;
+\restrict cwcxLe70jLGi0AgW7RA7RL2FptRRJ8QHL6HFooaVuufK7nB1kp0Xzs9K7dfUchR
+
+-- Dumped from database version 18.2 (Debian 18.2-1.pgdg13+1)
+-- Dumped by pg_dump version 18.2 (Debian 18.2-1.pgdg13+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
 
 --
--- Table structure for table `users`
+-- PostgreSQL database dump complete
 --
 
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
-  `user_id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(45) NOT NULL,
-  `user_email` varchar(45) NOT NULL,
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+\unrestrict cwcxLe70jLGi0AgW7RA7RL2FptRRJ8QHL6HFooaVuufK7nB1kp0Xzs9K7dfUchR
 
 --
--- Dumping data for table `users`
+-- Database "postgres" dump
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'diddy','blud@gmail.com'),(2,'diddy2','blud@gmail.com'),(3,'diddy3','blud@gmail.com');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+\connect postgres
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+--
+-- PostgreSQL database dump
+--
 
--- Dump completed on 2026-01-29 21:01:26
+\restrict thSkmSwoeQrCwvnNVKyAQDT6iOr67OQPywYK2c1C1M2YchJv4UvRvWowlkwnIwd
+
+-- Dumped from database version 18.2 (Debian 18.2-1.pgdg13+1)
+-- Dumped by pg_dump version 18.2 (Debian 18.2-1.pgdg13+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: jobs; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.jobs (
+    job_id integer NOT NULL,
+    user_id integer NOT NULL,
+    is_recurring smallint NOT NULL,
+    "interval" character varying(45) NOT NULL,
+    max_retry_count integer NOT NULL,
+    created_time integer NOT NULL
+);
+
+
+ALTER TABLE public.jobs OWNER TO postgres;
+
+--
+-- Name: jobs_job_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.jobs_job_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.jobs_job_id_seq OWNER TO postgres;
+
+--
+-- Name: jobs_job_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.jobs_job_id_seq OWNED BY public.jobs.job_id;
+
+
+--
+-- Name: task_history; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.task_history (
+    job_id integer NOT NULL,
+    execution_time integer NOT NULL,
+    status character varying(45) NOT NULL,
+    retry_count integer NOT NULL,
+    last_update_time integer NOT NULL
+);
+
+
+ALTER TABLE public.task_history OWNER TO postgres;
+
+--
+-- Name: task_schedule; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.task_schedule (
+    next_execution_time integer NOT NULL,
+    job_id integer NOT NULL
+);
+
+
+ALTER TABLE public.task_schedule OWNER TO postgres;
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    user_id integer NOT NULL,
+    username character varying(45) NOT NULL,
+    user_email character varying(45) NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.users_user_id_seq OWNER TO postgres;
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
+
+
+--
+-- Name: jobs job_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jobs ALTER COLUMN job_id SET DEFAULT nextval('public.jobs_job_id_seq'::regclass);
+
+
+--
+-- Name: users user_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
+
+
+--
+-- Data for Name: jobs; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.jobs (job_id, user_id, is_recurring, "interval", max_retry_count, created_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: task_history; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.task_history (job_id, execution_time, status, retry_count, last_update_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: task_schedule; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.task_schedule (next_execution_time, job_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (user_id, username, user_email) FROM stdin;
+\.
+
+
+--
+-- Name: jobs_job_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.jobs_job_id_seq', 1, false);
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_user_id_seq', 1, false);
+
+
+--
+-- Name: jobs jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jobs
+    ADD CONSTRAINT jobs_pkey PRIMARY KEY (job_id);
+
+
+--
+-- Name: task_history task_history_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.task_history
+    ADD CONSTRAINT task_history_pkey PRIMARY KEY (job_id);
+
+
+--
+-- Name: task_schedule task_schedule_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.task_schedule
+    ADD CONSTRAINT task_schedule_pkey PRIMARY KEY (job_id, next_execution_time);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+\unrestrict thSkmSwoeQrCwvnNVKyAQDT6iOr67OQPywYK2c1C1M2YchJv4UvRvWowlkwnIwd
+
+--
+-- PostgreSQL database cluster dump complete
+--

@@ -4,3 +4,5 @@ sqlalchemy
 databases 
 dotenv
 isodate
+psycopg2-binary
+python-multipart
