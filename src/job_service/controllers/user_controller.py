@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from sqlalchemy.orm import Session
-from services.user_service import get_user, create_user, get_all_users
 from db import get_db
-from models.User import UserRequest
+from models.User import UserRequest, User
 from models.Job import JobPostRequest, Job
 from models.TaskSchedule import TaskSchedule
 
@@ -15,30 +14,34 @@ router = APIRouter()
 
 @router.get("/users")
 async def fetch_all_users(db: Session = Depends(get_db)):
-    return get_all_users(db=db)
+    return db.query(User).all()
 
 
 @router.post("/users")
 async def create_new_user(new_user: UserRequest, db: Session = Depends(get_db)):
-    return create_user(user_email=new_user.user_email, username=new_user.username, db=db)
+    new_user = User(username=new_user.username, user_email=new_user.user_email)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user
 
 
 @router.get("/users/{user_id}")
 async def fetch_user_by_id(user_id: int, db: Session = Depends(get_db)):
-    fetched_user = get_user(user_id=user_id, db=db)
+    fetched_user = db.query(User).filter(User.user_id == user_id).first()
 
     if not fetched_user:
         raise HTTPException(status_code=404, detail=f"User with id {user_id} not found")
     
     return fetched_user
 
-# route for making a new job 
+
 @router.post("/users/{user_id}")
 async def add_job(user_id: int, job_request: JobPostRequest, file: UploadFile, db: Session = Depends(get_db)):
     now_dt = datetime.now().replace(second=0, microsecond=0)
     created_time = now_dt.timestamp()
 
-    fetched_user = get_user(user_id=user_id, db=db)
+    fetched_user = db.query(User).filter(User.user_id == user_id).first()
     if not fetched_user:
         raise HTTPException(status_code=404, detail="user with this id not found")
 
