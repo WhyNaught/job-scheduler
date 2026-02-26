@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, Form, File
 from sqlalchemy.orm import Session
 from db import get_db
 from models.User import UserRequest, User
@@ -8,6 +8,7 @@ from models.TaskSchedule import TaskSchedule
 from datetime import datetime
 
 import isodate
+import json
 
 router = APIRouter()
 
@@ -37,13 +38,16 @@ async def fetch_user_by_id(user_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/users/{user_id}")
-async def add_job(user_id: int, job_request: JobPostRequest, file: UploadFile, db: Session = Depends(get_db)):
+async def add_job(user_id: int, job_request: str = Form(...), file: UploadFile = File(...), db: Session = Depends(get_db)):
     now_dt = datetime.now().replace(second=0, microsecond=0)
     created_time = now_dt.timestamp()
 
     fetched_user = db.query(User).filter(User.user_id == user_id).first()
     if not fetched_user:
         raise HTTPException(status_code=404, detail="user with this id not found")
+    
+    job_request = json.loads(job_request)
+    job_request = JobPostRequest(**job_request)
 
     new_job = Job(
         user_id=user_id,
@@ -59,9 +63,9 @@ async def add_job(user_id: int, job_request: JobPostRequest, file: UploadFile, d
 
     # write job script to local host machine (this will be mapped via dockerfile)
     job_id = new_job.job_id
-    file_bytes = file.file.read()
+    file_bytes = await file.read()
 
-    with open(f"scripts/${job_id}.py", "wb") as bin_file:
+    with open(f"/app/scripts/{job_id}.py", "wb") as bin_file:
         bin_file.write(file_bytes)
 
     duration = isodate.parse_duration(job_request.interval)

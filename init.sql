@@ -104,7 +104,7 @@ SET default_table_access_method = heap;
 CREATE TABLE public.jobs (
     job_id integer NOT NULL,
     user_id integer NOT NULL,
-    is_recurring smallint NOT NULL,
+    is_recurring boolean NOT NULL,
     "interval" character varying(45) NOT NULL,
     max_retry_count integer NOT NULL,
     created_time integer NOT NULL
